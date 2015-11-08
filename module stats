@@ -1,0 +1,186 @@
+#!/usr/bin/python
+
+import os
+import shutil
+
+def rename_results(directory, name):
+    #List all simulation directories
+    simulation_list = os.listdir(directory)
+    #Copy and rename in the main directory file.arp and stats file
+    for i in range(len(simulation_list)):
+        results = os.listdir(directory+"/"+simulation_list[i])
+        for element in results:
+            if "stats" in element:
+                shutil.copyfile(directory+"/"+simulation_list[i]+"/"+element,
+                                directory+"/stats_"+name+"-"+str(i+1)+".txt")
+            elif ".arp" in element:
+                shutil.copyfile(directory+"/"+simulation_list[i]+"/"+element,
+                                directory+"/simulation_"+name+"-"+str(i+1)+".arp")
+    i += 1
+
+def structure(coordinates, genotypes, output):
+    #Open and read the file containing the coordinates of the 70 sampled populations
+    infile = open(coordinates, "r")
+    #Put each line as one element in the list
+    coordinates = infile.read().splitlines()
+    infile.close()
+    #Split each element of the previous list
+    N = list()
+    for element in coordinates:
+        N.append(element.split("\t"))
+    #Create a list containing the continent of the 70 sampled places
+    continents = list()
+    for element in N:
+        continents.append(element[4]+' ')
+    continents.pop(0)
+    #Create a list containing the number of individuals in each of the 70 sampled places
+    individuals = list()
+    for element in N:
+        individuals.append(element[3])
+    individuals.pop(0)
+    #Import the genotypes from the file.arp
+    infile = open(genotypes, "r")
+    #Put each line as one element in the list
+    data = infile.read().splitlines()
+    infile.close()
+    #Remove all non informative characters
+    del data[:16]
+    #Create a temporary file
+    outfile = open("prestructure.txt", "w")
+    #Write the genotypes
+    for element in data:
+        if "}" in element:
+            continue
+        elif "Sample" in element:
+            continue
+        elif element == '':
+            continue
+        #First strand
+        elif "Ind" in element:
+            d = element.split(' ')
+            n = " ".join(d[8:])
+            outfile.write(n+"\n")
+        #Second strand
+        else:
+            d = element.split(' ')
+            n = " ".join(d[14:])
+            outfile.write(n+"\n")
+    outfile.close()
+    #Open and read the temporary file
+    infile = open("prestructure.txt", "r")
+    #Put each line as one element in the list
+    genotypes = infile.read().splitlines()
+    infile.close()
+    #Create a list containing the continent of origin for each individual
+    cont_ind = list()
+    i = 0
+    while i < len(continents):
+        s = int(individuals[i])*2*continents[i]
+        l = s.split(' ')
+        cont_ind.extend(l[:-1])
+        i += 1
+    #Replace the continent name by a numerical code (America = 7)
+    for i in range(len(cont_ind)):
+        if cont_ind[i] == "Africa":
+            cont_ind[i] = '1'
+        elif cont_ind[i] == "Middle_East":
+            cont_ind[i] = '2'
+        elif cont_ind[i] == "Europe":
+            cont_ind[i] = '3'
+        elif cont_ind[i] == "Central_Asia":
+            cont_ind[i] = '4'
+        elif cont_ind[i] == "East_Asia":
+            cont_ind[i] = '5'
+        elif cont_ind[i] == "Oceania":
+            cont_ind[i] = '6'
+        else:
+            cont_ind[i] = '7'
+    #Write the genotype of each individual and the continent in an output file
+    outfile = open(output, "w")
+    i = 0
+    while i < len(genotypes):
+        if i%2 == 0:
+            outfile.write("ind_"+str(i)+' '+cont_ind[i]+' '+genotypes[i]+"\n")
+            i += 1
+        else:
+            outfile.write("ind_"+str(i-1)+' '+cont_ind[i]+' '+genotypes[i]+"\n")
+            i += 1
+    outfile.close()
+    #Remove the temporary file
+    os.remove("prestructure.txt")
+
+def pca_pop(coordinates, structure, out):
+    #Open and read the STRUCTURE file containing the genotype of all individual
+    infile = open(structure, "r")
+    #Put each line as one element in the list
+    genotypes = infile.read().splitlines()
+    infile.close()
+    #Open and read the file containing the coordinates of the 70 sampled populations
+    infile = open(coordinates, "r")
+    #Put each line as one element in the list
+    populations = infile.read().splitlines()
+    infile.close()
+    #Create a list containing the number of individuals for each of the 70 sampled populations
+    individuals = list()
+    for element in populations:
+        n = element.split("\t")
+        individuals.append(n[3])
+    del individuals[0]
+    #Create an output file
+    outfile = open(out, "w")
+    i = 0
+    j = 0
+    #For each individual, append a column indicating the population from which the individual is sampled
+    for element in genotypes:
+        outfile.write(element)
+        outfile.write(" "+str(i+1)+"\n")
+        j += 1
+        if j == 2*int(individuals[i]):
+            j = 0
+            i += 1
+            continue
+    outfile.close()
+
+def fst_nbA(stats, pairwise, AA, coordinates, outfst, outnbA):
+    #Open and read the stats file
+    infile = open(stats, "r")
+    l1 = infile.read().splitlines()
+    infile.close()
+    #Open and read the file containing all pairwise distances
+    infile = open(pairwise, "r")
+    distance_pairwise = infile.read().splitlines()
+    infile.close()
+    #Open and read the file containing distances from Addis Ababa
+    infile = open(AA, "r")
+    distance_from_AA = infile.read().splitlines()
+    infile.close()
+    #Open and read the file containing the coordinates
+    infile = open(coordinates, "r")
+    coordinates = infile.read().splitlines()
+    infile.close()
+    #Separate the strings
+    l2 = l1[0].split("\t")
+    l3 = l1[1].split("\t")
+    #Remove useless characters
+    del l2[0:2]
+    del l3[0]
+    #Create a list containing continents
+    continents = list()
+    for element in coordinates:
+        w = element.split("\t")
+        continents.append(w[-1])
+    del continents[0]
+    #Write fst and pairwise distances
+    fst = open(outfst, "w")
+    fst.write("n.adlt.fst.wc_p\tpairwise_fst\tpairwise_distances\n")
+    for i in range(len(distance_pairwise)):
+        fst.write(l2[i]+"\t"+l3[i]+"\t"+distance_pairwise[i]+"\n")
+    fst.close()
+    #Write nbA, distances from Addis Ababa and continents
+    nbA = open(outnbA, "w")
+    nbA.write("n.adlt.nbAll_p\tnb_alleles\tdistance_from_AA\tcontinents\n")
+    i = 0
+    while i < len(continents):
+        nbA.write(l2[i+2415]+"\t"+l3[i+2415]+"\t"+distance_from_AA[i]+"\t"+continents[i]+"\n")
+        i += 1
+    nbA.close()
