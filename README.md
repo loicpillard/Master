@@ -1,4 +1,4 @@
-Python module : geography
+PYTHON MODULE : geography
 
 patch_matrix
 - Function creating a file.ini for quantiNemo with random sampling
@@ -27,25 +27,25 @@ patch_capacity
 - Output file (1) : new patch capacity file instead of the old one (overwritting) 
 
 
-Python module : stats
+PYTHON MODULE : stats
 
 rename_results
-	Function copying and renaming the output files from simulations with quantiNemo
-	Input file (0) : name of the directory where the simulation directories are stored, name of the type of simulation
-	Output files (2+) : genotypes.arp and stats.txt
+- Function copying and renaming the output files from simulations with quantiNemo
+- Input file (0) : name of the directory where the simulation directories are stored, name of the type of simulation
+- Output files (2+) : genotypes.arp and stats.txt
 
 structure
-	Function creating a file containing the genotypes for STRUCTURE
-	Input files (2) : file containing the coordinates with continents, genotypes.arp
-	Output file (1) : file containing the genotypes and the continents for STRUCTURE
+- Function creating a file containing the genotypes for STRUCTURE
+- Input files (2) : file containing the coordinates with continents, genotypes.arp
+- Output file (1) : file containing the genotypes and the continents for STRUCTURE
 
 pca_pop
-	Function creating a file containing the genotypes, the continents and the populations for PCA per population
-	Input files (2) : file containing the coordinates with continents, genotypes for STRUCTURE (from previous function)
-	Output file (1) : file containing the genotypes, the continents and the populations for PCA per population
+- Function creating a file containing the genotypes, the continents and the populations for PCA per population
+- Input files (2) : file containing the coordinates with continents, genotypes for STRUCTURE (from previous function)
+- Output file (1) : file containing the genotypes, the continents and the populations for PCA per population
 
 fst_nbA
-	Function creating two files, one containing pairwise fst and pairwise distances, one containing number of alleles and distance from Addis Ababa
-	Input files (4) : stats file, pairwise distances file, distances from Addis Ababa file, coordinates with continents file
-	Output files (2) : file containing pairwise fst and pairwise distances, file containing number of alleles and distance from Addis Ababa
+- Function creating two files, one containing pairwise fst and pairwise distances, one containing number of alleles and distance from Addis Ababa
+- Input files (4) : stats file, pairwise distances file, distances from Addis Ababa file, coordinates with continents file
+- Output files (2) : file containing pairwise fst and pairwise distances, file containing number of alleles and distance from Addis Ababa
 
