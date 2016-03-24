@@ -59,9 +59,10 @@ admixture_rearrangement(individuals, admixture_Q, output)
 - Input files (2) : file containing the continent of origin of all individuals and the ADMIXTURE.Q results file
 - Output file (1) : file containing the rearranged ADMIXTURE.Q results
  
-admixture_bestK(bestK_input, output)
+admixture_bestK(bestK_input, output, nbK)
 - Function selecting the best K from ADMIXTURE results (need to select the CV error from log.out -> cf manual)
 - Input file (1) : file containing all CV error with K for one sampling
+- Input parameter (1) : biggest number of K
 - Output file (1) : file containing the best K for each run
 
 cluster_nbK(kmeans_result, output)
