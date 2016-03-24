@@ -85,7 +85,7 @@ cluster_good_summary(good_clustering_name, out_good_clustering_summary)
 - Output file (1) : summary file
 
 cluster_individuals_continent(kmeans_result_name, good_clustering_name, out_cluster_individuals):
-- Function creating a file like "ADMIXTURE.Q" 
+- Function creating a file like "ADMIXTURE.Q" from K-means clustering
 - Input parameters (2) : name of the files kmeans_results (without extension and number) and name of good_clustering file
 - Output file (1) : file like "ADMIXTURE.Q" for a the current sampling
 
