@@ -1,30 +1,25 @@
 PYTHON MODULE : geography
 
-patch_matrix
-- Function creating a file.ini for quantiNemo with random sampling
-- Input files (3) : capacity (map), populations, parameters file without sampling
-- Output files (2) : setting file (.ini), sampling map
+patch_matrix(capacity, pop, parameters, out_settings, out_sampling)
+- Function creating a file.ini for quantiNemo with a random sampling
+- Input files (3) : capacity (map), file containing the size of each population, parameters file for qN without sampling
+- Output files (2) : complete setting file (.ini), sampling map file
 
-coordinates
+coordinates(sampling, coordinates)
 - Function creating a file containing the coordinates and the continent of each sampled point
-- Input file (1) : sampling file
+- Input file (1) : sampling map file
 - Output file (1) : file containing the coordinates, the number of sampled individuals and the continent of each sampled point
 
-distances_pairwise
-- Function calculating all pairwise distances between sampled points
-- Input file (1) : file with coordinates and continents 
-- Output file (1) : file containing all pairwise distances between sampled points
-
-distances_from_AA
-- Function calculating distances between Addis Ababa and sampled points
-- Input file (1) : file with coordinates and continents
-- Output file (1) : file containing distances between Addis Ababa and sampled points
-
-patch_capacity
+patch_capacity(capacity, number)
 - Function modifying the patch capacity of each habitable deme
 - Input file (1) : patch capacity file
 - Input parameter (1) : the new capacity of the deme
-- Output file (1) : new patch capacity file instead of the old one (overwritting) 
+- Output file (*1) : new patch capacity file instead of the old one (overwritting) 
+
+the_map(capacity, outmap)
+- Function creating the map for the distances calculation with A* algorithm
+- Input file (1) : patch capacity file
+- Output file (1) : map file for the A* algorithm 
 
 
 PYTHON MODULE : stats
@@ -86,12 +81,12 @@ cluster_good(kmeans_result, good_clustering_out)
 
 cluster_good_summary(good_clustering_name, out_good_clustering_summary)
 - Function creating a file containing the average proportion of good clustering for each continent
-- Input file (0) : name of the files good_clustering (without extension and number)
+- Input parameters (1) : name of the files good_clustering (without extension and number)
 - Output file (1) : summary file
 
 cluster_individuals_continent(kmeans_result_name, good_clustering_name, out_cluster_individuals):
 - Function creating a file like "ADMIXTURE.Q" 
-- Input file (0) : name of the files kmeans_results (without extension and number)
+- Input parameters (2) : name of the files kmeans_results (without extension and number) and name of good_clustering file
 - Output file (1) : file like "ADMIXTURE.Q" for a the current sampling
 
 procrustes(gps_coordinates, out_gps_coordinates_rad)
@@ -101,7 +96,7 @@ procrustes(gps_coordinates, out_gps_coordinates_rad)
 
 procrustes_summary(procrustes_results_name, procrustes_summary_angle_out, procrustes_summary_score_out)
 - Function summarizing the results of Procrustes analysis
-- Input file (0) : name of the files procrustes_results (without extension and number)
+- Input parameter (1) : name of the files procrustes_results (without extension and number)
 - Output files (2) : file containing a summary of rotation angle and file containing summary of score 
 
 
