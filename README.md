@@ -34,6 +34,11 @@ fst_nbA(stats, pairwise, AA, coordinates, outfst, outnbA)
 - Input files (4) : stats file, pairwise distances file, distances from Addis Ababa file, coordinates with continents file
 - Output files (2) : file containing pairwise fst and pairwise distances, file containing number of alleles and distance from Addis Ababa
 
+individuals_populations (coordinates, AA, individuals_out, populations_out)
+- Function creating a file containing the continent of origin of each individual and a file for population
+- Input files (2) : coordinates file and distances from Addis Ababa file
+- Output files (2) : file containing the continent of origin of each individual and a file for population
+	
 structure_arp(coordinates, genotypes, out_structure)
 - Function creating a file containing the genotypes for STRUCTURE from arp format
 - Input files (2) : file containing the coordinates with continents, genotypes.arp
@@ -43,11 +48,6 @@ structure_dat(individuals, genotypes, out_structure)
 - Function creating a file containing the genotypes for STRUCTURE from dat format
 - Input files (2) : file containing the individuals with continents, genotypes.dat
 - Output file (1) : file containing the genotypes and the continents for STRUCTURE	
-
-structure_individuals(structure, out_individuals)
-- Function creating a file containing the continent of origin of each individual
-- Input file (1) : file containing the genotypes for STRUCTURE
-- Output file (1) : file containing the continent of origin of each individual
 
 admixture(structure, outname)
 - Function transforming the microsatellites data into SNP data
